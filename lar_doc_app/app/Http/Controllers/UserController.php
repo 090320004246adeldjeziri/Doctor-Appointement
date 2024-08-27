@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointments;
 use App\Models\Doctor;
 use App\Models\User;
 use App\Models\UserDetails;
@@ -24,6 +25,9 @@ class UserController extends Controller
         $user = Auth::user();
         $doctor = User::where('type', 'doctor')->get();
         $doctorData = Doctor::all();
+        //Now return appointment of today together with user data
+        $date = now()->format('m/d/y');
+        $appointment = Appointments::where('date',$date)->first();
 
         foreach ($doctorData as $data) {
             foreach ($doctor as $info) {

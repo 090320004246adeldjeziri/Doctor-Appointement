@@ -18,23 +18,23 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-
-      
+    {  
         $user = array();
         $user = Auth::user();
         $doctor = User::where('type', 'doctor')->get();
         $doctorData = Doctor::all();
         //Now return appointment of today together with user data
-        $date = now()->format('m/d/y');
-        $appointment = Appointments::where('date',$date)->first();
+        $date = now()->format('n/j/Y');
+        $appointment = Appointments::where('status','upcoming')->where('date',$date)->first();
 
         foreach ($doctorData as $data) {
             foreach ($doctor as $info) {
                 if ($data['doc_id'] == $info['id']) {
                     $data['doctor_name'] = $info['name'];
                     $data['doctor_profile'] = $info['profile_photo_url'];
-                   
+                    if(isset($appointment) && $appointment['doc_id'] == $info['id']){
+                        $data['appointments'] = $appointment;
+                    }
                 }
             }
         }
